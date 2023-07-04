@@ -78,7 +78,7 @@ drop table day_code;
 
 drop table stores_has_categories;
 
-drop table categories;
+drop table store_categories;
 
 drop table stores;
 
@@ -833,7 +833,7 @@ CREATE TABLE IF NOT EXISTS  `store_business_hours` (
     DEFAULT CHARACTER SET = utf8mb4
     COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS  `categories` (
+CREATE TABLE IF NOT EXISTS  `store_categories` (
                                              `category_code` VARCHAR(10) NOT NULL,
                                              `description` VARCHAR(30) NOT NULL,
                                              PRIMARY KEY (`category_code`))
@@ -848,7 +848,7 @@ CREATE TABLE IF NOT EXISTS  `stores_has_categories` (
                                                          INDEX `FK_store_categories_TO_stores_has_categories_1` (`category_code` ASC) VISIBLE,
                                                          CONSTRAINT `FK_store_categories_TO_stores_has_categories_1`
                                                              FOREIGN KEY (`category_code`)
-                                                                 REFERENCES  `categories` (`category_code`),
+                                                                 REFERENCES  `store_categories` (`category_code`),
                                                          CONSTRAINT `FK_stores_TO_stores_has_categories_1`
                                                              FOREIGN KEY (`store_id`)
                                                                  REFERENCES  `stores` (`store_id`))
@@ -859,6 +859,8 @@ CREATE TABLE IF NOT EXISTS  `stores_has_categories` (
 ALTER TABLE `coupon_types` ADD `sub_type` VARCHAR(10) NOT NULL AFTER `coupon_type_id`;
 
 ALTER TABLE `coupon_usage` ADD `sub_type` VARCHAR(10) NOT NULL AFTER `coupon_usage_id`;
+
+ALTER TABLE `point_reason` ADD `sub_type` VARCHAR(10) NOT NULL AFTER `point_reason_id`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
