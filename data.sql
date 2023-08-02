@@ -216,8 +216,8 @@ INSERT INTO  oauth_type (oauth_type_id, provider) VALUES (1, '페이코');
 
 INSERT INTO  oauth_accounts (account_id, oauth_type_id, account_code) VALUES (1, 1, 'adfadfadsfasdf');
 
-Insert into images (image_id, saved_name, is_public) VALUES (1, 'adlkfjadlkfjasodiadk.png', 1);
-Insert into images (image_id, saved_name, is_public) VALUES (2, 'aldkjfalsdkjfaldkfja.png', 0);
+Insert into images (image_id, origin_name,saved_name, is_public) VALUES (1, 'adfadfadp.png','adlkfjadlkfjasodiadk.png', 1);
+Insert into images (image_id, origin_name,saved_name, is_public) VALUES (2, 'adfadfadf.png','aldkjfalsdkjfaldkfja.png', 0);
 
 INSERT INTO  stores (store_id, merchant_id, address_id, account_id, bank_type_code, store_status_code, business_license_image_id, business_license_number, representative_name, opening_date, name, phone_number, default_earning_rate, description, store_image_id, bank_account_number) VALUES (1, null, 2, 4, 'KB', 'OPEN', 1,'123456789', '유사장', '2023-06-01', '보쌈맛있는집', '0502234123', 1.1, '블라블라블라', 2,'110423032123');
 INSERT INTO merchants(name) VALUES ('네네치킨');
