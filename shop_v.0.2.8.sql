@@ -507,7 +507,7 @@ CREATE TABLE IF NOT EXISTS  `oauth_type` (
 
 
 CREATE TABLE IF NOT EXISTS  `oauth_accounts` (
-                                                 `account_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                                 `account_id` BIGINT NOT NULL,
                                                  `oauth_type_id` INT NOT NULL,
                                                  `account_code` VARCHAR(30) NOT NULL,
                                                  PRIMARY KEY (`account_id`),
@@ -963,6 +963,103 @@ alter table `order_details` add column `now_name` VARCHAR(30) not null after `co
 alter table `charges` add column `payment_key` VARCHAR(255) NOT NULL after `charged_amount`;
 
 alter table `deliveries` modify column `delivery_start_at` DATETIME NULL;
+
+drop table `cart_detail_menu_options`;
+
+CREATE TABLE IF NOT EXISTS  `cart_detail_menu_options` (
+                                                          `cart_detail_id` BIGINT NOT NULL,
+                                                          `option_id` BIGINT NOT NULL,
+                                                          primary key(`cart_detail_id`, `option_id`),
+                                                          foreign key(`cart_detail_id`) references `cart_details`(`cart_detail_id`),
+                                                          foreign key(`option_id`) references `options`(`option_id`)
+)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
+
+ALTER TABLE oauth_accounts
+DROP FOREIGN KEY FK_accounts_TO_oauth_accounts_1;
+
+ALTER TABLE oauth_accounts
+DROP FOREIGN KEY FK_oauth_type_TO_oauth_accounts_1;
+
+alter table oauth_accounts drop primary key;
+
+ALTER TABLE oauth_accounts
+ADD PRIMARY KEY (account_id, oauth_type_id);
+
+ALTER TABLE oauth_accounts
+ADD FOREIGN KEY (account_id) REFERENCES accounts(account_id);
+
+ALTER TABLE oauth_accounts
+ADD FOREIGN KEY (oauth_type_id) REFERENCES oauth_type(oauth_type_id);
+
+
+alter table `images` add column `domain_name` varchar(30) not null after `image_id`;
+
+alter table `images` add column `location_code` varchar(30) not null after `image_id`;
+
+alter table `stores` add column `minimum_order_price` int not null default 0 after `default_earning_rate`;
+
+alter table `stores` modify column `default_earning_rate` decimal(2,1) unsigned not null default 0;
+
+alter table `menu` modify column `earning_rate` decimal(2,1) unsigned not null default 0;
+
+alter table `stores` modify column `delivery_cost` int unsigned not null default 4000;
+
+alter table `stores` modify column `store_image_id` BIGINT null;
+
+alter table `menu` modify column `menu_image_id` BIGINT null;
+
+CREATE TABLE IF NOT EXISTS  `word_dict` (
+                                                          `word_id` BIGINT NOT NULL,
+                                                          `word_text` VARCHAR(20) NOT NULL,
+                                                          primary key(`word_id`)
+                                                          )
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
+    
+    CREATE TABLE IF NOT EXISTS  `synonym_dict` (
+                                                          `basic_word_id` BIGINT NOT NULL,
+                                                          `synonym_word_id` BIGINT NOT NULL,
+                                                          primary key(`basic_word_id`, `synonym_word_id`),
+                                                          foreign key(`basic_word_id`) references `word_dict`(`word_id`),
+                                                          foreign key(`synonym_word_id`) references `word_dict`(`word_id`)
+)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
+    
+alter table `carts` modify column `account_id` BIGINT unique not null;
+
+alter table `point_reason` add column `point_reason_explain` VARCHAR(100) not null after `sub_type`;
+
+alter table `images` modify column `saved_name` CHAR(41) not null;
+
+alter table `orders` add column `delivery_address` VARCHAR(160) not null after `ordered_at`;
+
+alter table `orders` add column `estimated_time_of_arrival` DATETIME null after `delivery_address`;
+
+alter table `orders` add column `delivery_cost` INT not null after `delivery_address`;
+
+alter table `review` add column `updated_at` DATETIME null after `written_at`;
+
+alter table `coupon_logs` add column `discount_amount` INT not null after `record_at`;
+
+    CREATE TABLE IF NOT EXISTS  `ranks_has_coupon_policy` (
+                                                          `rank_code` VARCHAR(10) NOT NULL,
+                                                          `coupon_policy_id` BIGINT NOT NULL,
+                                                          primary key(`rank_code`, `coupon_policy_id`),
+                                                          foreign key(`rank_code`) references `ranks`(`rank_code`),
+                                                          foreign key(`coupon_policy_id`) references `coupon_policy`(`coupon_policy_id`)
+)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
+    
+alter table `coupon_policy` add column `is_hidden` tinyint not null default false after `is_deleted`;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
